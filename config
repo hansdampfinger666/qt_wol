@@ -1,0 +1,16 @@
+
+machine = Enterprise 
+mac = 00:00:00:00:00:00
+ostype = windows
+
+machine = FreeNAS
+mac = 00:00:00:00:00:02
+ostype = freebsd
+
+machine = DeepSpace9
+mac = 00:00:00:00:00:03
+ostype = linux
+
+
+
+
