@@ -9,7 +9,7 @@ Machines::Machines(){
 
 void Machines::read_file(){
 
-    std::ifstream file("/home/al/Documents/QtCreatorProjects/wolqt/test");   // turn into variable (option in application)
+    std::ifstream file("/home/al/Documents/QtCreatorProjects/wolqt/config");   // turn into variable (option in application)
     std::string str;
     int r = -1;
 

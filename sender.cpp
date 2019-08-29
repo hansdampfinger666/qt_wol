@@ -7,22 +7,34 @@ Sender::Sender(MainWindow &w){
 }
 
 
-void Sender::receive_todo(MainWindow::Todo_list i_todo){
+void Sender::receive_todo(MainWindow::Todo_list& todo){
 
-    todo = i_todo;
-    std::cout << "Sender class has recieved the following list of machines to wake: " << std::endl;
+    if (!todo.wol.empty()){       // check if sender is receiving a WOL todo list
+
+    std::cout << "Sender received the following WOL todo list:" << std::endl;
     cout_vec(todo.machines);
 
     for (std::vector<std::string> elem : todo.machines) {
 
-        std::cout << "MAC adresses to send wake signal to: " << elem[1] << std::endl;
         send_wol(elem[1], port, bcast);
+        std::cout << "sending WOL signal to: " << elem[1] << " to port: " << port << " to bcast: " << bcast << std::endl;
+    }
+    }
+
+    if (!todo.shutdown.empty()){        // check if sender is receiving a shutdown todo list
+
+        std::cout << "Sender received the following shutdown todo list:" << std::endl;
+        cout_vec(todo.machines);
+
+        for (std::vector<std::string> elem : todo.machines) {
+
+            std::cout << "sending shutdown signal to: " << elem[1] << " to port: " << port << " to bcast: " << bcast << std::endl;
+        }
     }
 }
 
 
 void Sender::send_wol(const std::string& hardware_addr, unsigned port, unsigned long bcast){
-
 
     // Fetch the hardware address.
     const std::string ether_addr{get_ether(hardware_addr)};
@@ -47,6 +59,8 @@ void Sender::send_wol(const std::string& hardware_addr, unsigned port, unsigned 
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = bcast;
     addr.sin_port = htons(port);
+
+
 
     // Send the packet out.
     if (sendto(packet.get(), message.c_str(), message.length(), 0,
@@ -100,6 +114,12 @@ unsigned Sender::get_hex_from_string(const std::string& s)
     }
     return hex;
 }
+
+
+
+
+
+
 
 
 

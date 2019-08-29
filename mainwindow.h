@@ -6,8 +6,10 @@
 #include <QCheckBox>
 #include <QObject>
 #include <QString>
+#include <QShortcut>
 #include <iostream>
 #include <vector>
+
 
 namespace Ui {
 class MainWindow;
@@ -18,9 +20,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(int &,const std::vector<std::vector<std::string>> &, QWidget *parent = nullptr);
+    explicit MainWindow(int &,const std::vector<std::vector<std::string>>&, QWidget *parent = nullptr);
     ~MainWindow();
-    std::vector<std::vector<std::string>> v_machines;
     int no_machines;
     struct Todo_list{
     public:
@@ -34,8 +35,7 @@ public:
     template <typename T> void cout_vec (std::vector<T> &);
 
 signals:
-//    void transmit_to_object(bool);
-    void emit_todo(Todo_list);
+    void emit_todo(Todo_list&);
 
 private slots:
     void on_buttonBox_accepted();

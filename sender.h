@@ -22,13 +22,12 @@ class Sender : public QObject{
     Q_OBJECT
 
 public:
-    Sender(MainWindow &);
-    MainWindow::Todo_list todo;
+    Sender(MainWindow&);
 
-    template <typename T> static void cout_vec (std::vector<std::vector<T>> &);
+    template <typename T> static void cout_vec (std::vector<std::vector<T>>&);
 
 public slots:
-    void receive_todo(MainWindow::Todo_list);
+    void receive_todo(MainWindow::Todo_list&);
 
 private:
     void send_wol(const std::string& hardware_addr, unsigned port, unsigned long bcast);
