@@ -28,11 +28,13 @@ SOURCES += \
         config_parser.cpp \
         main.cpp \
         mainwindow.cpp \
+        pinger.cpp \
         sender.cpp
 
 HEADERS += \
         config_parser.h \
         mainwindow.h \
+        pinger.h \
         sender.h
 
 FORMS += \

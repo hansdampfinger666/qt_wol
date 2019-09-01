@@ -1,13 +1,12 @@
 #include <config_parser.h>
 
-Machines::Machines(){
+
+Config::Config(){
 
     read_file();
-//    cout_vec(vtable);
-
 }
 
-void Machines::read_file(){
+void Config::read_file(){
 
     std::ifstream file("/home/al/Documents/QtCreatorProjects/wolqt/config");   // turn into variable (option in application)
     std::string str;
@@ -27,21 +26,19 @@ void Machines::read_file(){
             }
             if (str.substr(0,len_id_os)==id_os){
                 entry[2] = (del_trailing_spaces(str.substr(len_id_os)));
-                vtable.push_back(entry);
+                config.push_back(entry);
             }
         }
 }
 
-std::string Machines::del_trailing_spaces (std::string str){
+std::string Config::del_trailing_spaces (std::string str){
 
         str = str.substr(0, str.find_last_not_of(" ")+1);
         return str;
 }
 
 
-
-
-void Machines::cout_vec (std::vector< std::vector<std::string> > &vec){
+void Config::cout_vec (std::vector< std::vector<std::string> > &vec){
 
 unsigned long rows = 1;
 rows = vec.size();

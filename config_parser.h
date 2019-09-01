@@ -6,11 +6,11 @@
 #include <fstream>
 
 
-class Machines{
+class Config{
 
 public:
-    Machines();
-    std::vector<std::vector<std::string>> vtable;
+    Config();
+    std::vector<std::vector<std::string>> config;
     int no_machines = 0;
 
     static const int no_config_params = 3;

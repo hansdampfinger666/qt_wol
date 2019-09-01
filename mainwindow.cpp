@@ -2,14 +2,13 @@
 #include <ui_mainwindow.h>
 
 
-MainWindow::MainWindow(int &i_no_machines, const std::vector< std::vector<std::string>> &i_vtable, QWidget *parent) :
+MainWindow::MainWindow(std::vector< std::vector<std::string>>& i_machines, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    todo.machines = i_vtable;
-    no_machines = i_no_machines;
     cb_list = get_cb(centralWidget());
+    machines = i_machines;
     modify_cb();
 
     QShortcut *returnShortcut = new QShortcut(QKeySequence("Return"), ui->buttonBox);
@@ -35,78 +34,49 @@ QList <QCheckBox *> MainWindow::get_cb(QWidget *obj){
 
 void MainWindow::modify_cb(){
 
-    for (int i = 0; i < no_machines; i++){
+    for (unsigned long i = 0; i < machines.size(); i++){
 
-        cb_list[i]->setText (QString::fromStdString(todo.machines[i][0]));      // rename all checkboxes according to machine list from config
+        cb_list[i]->setText(QString::fromStdString(machines[i][0]));
     }
 }
 
 
 void MainWindow::on_buttonBox_accepted(){
 
-    todo.wol.clear();
+    unsigned int i = 0;
+    bool mode;
 
-    foreach (QCheckBox *checkBox, cb_list){     // if OK was pressed -> check all checkbox states and set bool for wol/shutdown command
+    foreach (QCheckBox* checkBox, cb_list){
 
-        if ( checkBox->checkState() == 2 && ui->verticalSlider->value() )
-            todo.wol.push_back(1);
-        else if ( !(checkBox->checkState() == 2) && ui->verticalSlider->value() )
-            todo.wol.push_back(0);
-        if ( checkBox->checkState() == 2 && !ui->verticalSlider->value() )
-            todo.shutdown.push_back(1);
-        else if ( !(checkBox->checkState() == 2) && !ui->verticalSlider->value() )
-            todo.shutdown.push_back(0);
-    }
+        switch (ui->verticalSlider->value()){
 
-    cout_vec(todo.wol);
-    cout_vec(todo.shutdown);
+        case true:
+            if (checkBox->checkState()==0){
+                machines.erase(machines.begin() + i);
+                i--;
+            }
+            mode = 1;
+            break;
 
-    int i = 0;
-
-    if (ui->verticalSlider->value()){
-
-    for (auto it = todo.machines.begin(); it != todo.machines.end();) {     // delete all entries without WOL bool = 1
-
-        if (todo.wol[i] == 0) {
-            it = todo.machines.erase(it);
-        }
-        if (todo.wol[i] == 1) {
-            ++it;
+        case false:
+            if (checkBox->checkState()==0){
+                machines.erase(machines.begin() + i);
+                i--;
+            }
+            mode = 0;
+            break;
         }
         i++;
     }
-    i = 0;
-    }
 
-    else if (!ui->verticalSlider->value()){
-
-    for (auto it = todo.machines.begin(); it != todo.machines.end();) {     // delete all entries without shutdown bool = 1
-
-        if (todo.shutdown[i] == 0) {
-            it = todo.machines.erase(it);
-        }
-        else if (todo.shutdown[i] == 1) {
-            ++it;
-        }
-        i++;
-    }
-    }
-
-    int sliderpos;
-    sliderpos = ui->verticalSlider->value();
-    std::cout << "Slider position at: " << sliderpos << std::endl;
-
-    emit emit_todo(todo);
+    emit emit_todo(machines, mode);
     qApp->exit();
 }
 
 
-
-
-
 void MainWindow::on_buttonBox_rejected(){
 
-        qApp->exit();
+    qApp->exit();
 }
 
 

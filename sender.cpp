@@ -7,29 +7,24 @@ Sender::Sender(MainWindow &w){
 }
 
 
-void Sender::receive_todo(MainWindow::Todo_list& todo){
+void Sender::receive_todo(std::vector <std::vector<std::string>>& todo, bool& mode){
 
-    if (!todo.wol.empty()){       // check if sender is receiving a WOL todo list
+    switch (mode){
 
-    std::cout << "Sender received the following WOL todo list:" << std::endl;
-    cout_vec(todo.machines);
+    case 1:
+        for (std::vector<std::string> elem : todo) {
 
-    for (std::vector<std::string> elem : todo.machines) {
+            send_wol(elem[1], port, bcast);
+            std::cout << "sending WOL signal to: " << elem[1] << " to port: " << port << " to bcast: " << bcast << std::endl;
+        }
+        break;
 
-        send_wol(elem[1], port, bcast);
-        std::cout << "sending WOL signal to: " << elem[1] << " to port: " << port << " to bcast: " << bcast << std::endl;
-    }
-    }
-
-    if (!todo.shutdown.empty()){        // check if sender is receiving a shutdown todo list
-
-        std::cout << "Sender received the following shutdown todo list:" << std::endl;
-        cout_vec(todo.machines);
-
-        for (std::vector<std::string> elem : todo.machines) {
+    case 0:
+        for (std::vector<std::string> elem : todo) {
 
             std::cout << "sending shutdown signal to: " << elem[1] << " to port: " << port << " to bcast: " << bcast << std::endl;
         }
+        break;
     }
 }
 

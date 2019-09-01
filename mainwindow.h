@@ -20,22 +20,16 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(int &,const std::vector<std::vector<std::string>>&, QWidget *parent = nullptr);
+    MainWindow (std::vector<std::vector<std::string>>&, QWidget* parent = nullptr);
     ~MainWindow();
+    std::vector <std::vector<std::string>> machines;
     int no_machines;
-    struct Todo_list{
-    public:
-        std::vector <std::vector<std::string>> machines;
-        std::vector <bool> wol;
-        std::vector <bool> shutdown;
-    };
-    Todo_list todo;
 
-    template <typename T> void cout_vec (std::vector<std::vector<T>> &);
-    template <typename T> void cout_vec (std::vector<T> &);
+    template <typename T> void cout_vec (std::vector<std::vector<T>>&);
+    template <typename T> void cout_vec (std::vector<T>&);
 
 signals:
-    void emit_todo(Todo_list&);
+    void emit_todo(std::vector <std::vector<std::string>>&, bool&);
 
 private slots:
     void on_buttonBox_accepted();

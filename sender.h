@@ -27,7 +27,7 @@ public:
     template <typename T> static void cout_vec (std::vector<std::vector<T>>&);
 
 public slots:
-    void receive_todo(MainWindow::Todo_list&);
+    void receive_todo(std::vector <std::vector<std::string>>&, bool&);
 
 private:
     void send_wol(const std::string& hardware_addr, unsigned port, unsigned long bcast);
