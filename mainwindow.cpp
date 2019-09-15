@@ -27,7 +27,7 @@ MainWindow::~MainWindow()
 
 QList <QCheckBox *> MainWindow::get_cb(QWidget *obj){
 
-    cb_list = obj->findChildren <QCheckBox *>();        // find all checkboxes in widget
+    cb_list = obj->findChildren <QCheckBox *>();
     return cb_list;
 }
 

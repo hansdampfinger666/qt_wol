@@ -38,7 +38,7 @@ std::string Config::del_trailing_spaces (std::string str){
 }
 
 
-void Config::cout_vec (std::vector< std::vector<std::string> > &vec){
+void Config::cout_vec (std::vector< std::vector<std::string>>& vec){
 
 unsigned long rows = 1;
 rows = vec.size();

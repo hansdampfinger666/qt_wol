@@ -4,14 +4,11 @@
 #include <vector>
 #include <string>
 #include <mainwindow.h>
-#include <string>
 #include <iostream>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <getopt.h>
-#include <iostream>
 #include <stdexcept>
-#include <string>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <QObject>
