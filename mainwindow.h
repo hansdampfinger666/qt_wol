@@ -9,6 +9,7 @@
 #include <QShortcut>
 #include <iostream>
 #include <vector>
+#include <thread>
 
 
 namespace Ui {
@@ -30,12 +31,15 @@ public:
 
 signals:
     void emit_todo(std::vector <std::vector<std::string>>&, bool&);
+    void emit_pinger_stop();
 
 private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
 
 private:
+    void wake_up_pinger();
+
     Ui::MainWindow *ui;
     QList <QCheckBox *> cb_list;
     QList <QCheckBox *> get_cb (QWidget *);

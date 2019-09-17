@@ -14,8 +14,8 @@
 #include <QObject>
 
 
-class Sender : public QObject{
-
+class Sender : public QObject
+{
     Q_OBJECT
 
 public:
@@ -34,8 +34,8 @@ private:
     const unsigned port{60000};
     const unsigned long bcast{0xFFFFFFFF};
 
-    class socket_handle{
-
+    class socket_handle
+    {
         public:
             explicit socket_handle(int descriptor) : _descriptor(descriptor) {
                 if (_descriptor < 0)

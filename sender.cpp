@@ -7,21 +7,21 @@ Sender::Sender(MainWindow &w){
 }
 
 
-void Sender::receive_todo(std::vector <std::vector<std::string>>& todo, bool& mode){
-
-    switch (mode){
-
+void Sender::receive_todo(std::vector <std::vector<std::string>>& todo, bool& mode)
+{
+    switch (mode)
+    {
     case 1:
-        for (std::vector<std::string> elem : todo) {
-
+        for (std::vector<std::string> elem : todo)
+        {
             send_wol(elem[1], port, bcast);
             std::cout << "sending WOL signal to: " << elem[1] << " to port: " << port << " to bcast: " << bcast << std::endl;
         }
         break;
 
     case 0:
-        for (std::vector<std::string> elem : todo) {
-
+        for (std::vector<std::string> elem : todo)
+        {
             std::cout << "sending shutdown signal to: " << elem[1] << " to port: " << port << " to bcast: " << bcast << std::endl;
         }
         break;
@@ -29,8 +29,8 @@ void Sender::receive_todo(std::vector <std::vector<std::string>>& todo, bool& mo
 }
 
 
-void Sender::send_wol(const std::string& hardware_addr, unsigned port, unsigned long bcast){
-
+void Sender::send_wol(const std::string& hardware_addr, unsigned port, unsigned long bcast)
+{
     // Fetch the hardware address.
     const std::string ether_addr{get_ether(hardware_addr)};
 
@@ -39,13 +39,15 @@ void Sender::send_wol(const std::string& hardware_addr, unsigned port, unsigned 
     // Build the message to send.
     //   (6 * 0XFF followed by 16 * destination address.)
     std::string message(6, 0xFF);
-    for (size_t i = 0; i < 16; ++i) {
+    for (size_t i = 0; i < 16; ++i)
+    {
         message += ether_addr;
     }
 
     // Set socket options.
     const int optval{1};
-    if (setsockopt(packet.get(), SOL_SOCKET, SO_BROADCAST, &optval, sizeof(optval)) < 0) {
+    if (setsockopt(packet.get(), SOL_SOCKET, SO_BROADCAST, &optval, sizeof(optval)) < 0)
+    {
         throw std::runtime_error("Failed to set socket options");
     }
 
@@ -55,21 +57,21 @@ void Sender::send_wol(const std::string& hardware_addr, unsigned port, unsigned 
     addr.sin_addr.s_addr = bcast;
     addr.sin_port = htons(port);
 
-
-
     // Send the packet out.
     if (sendto(packet.get(), message.c_str(), message.length(), 0,
-        reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
+        reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0)
+    {
         throw std::runtime_error("Failed to send packet");
     }
 }
 
 
-std::string Sender::get_ether(const std::string& hardware_addr){
-
+std::string Sender::get_ether(const std::string& hardware_addr)
+{
     std::string ether_addr;
 
-    for (size_t i = 0; i < hardware_addr.length();) {
+    for (size_t i = 0; i < hardware_addr.length();)
+    {
         // Parse two characters at a time.
         unsigned hex = get_hex_from_string(hardware_addr.substr(i, 2));
         i += 2;
@@ -92,18 +94,23 @@ unsigned Sender::get_hex_from_string(const std::string& s)
 {
     unsigned hex{0};
 
-    for (size_t i = 0; i < s.length(); ++i) {
+    for (size_t i = 0; i < s.length(); ++i)
+    {
         hex <<= 4;
-        if (isdigit(s[i])) {
+        if (isdigit(s[i]))
+        {
             hex |= s[i] - '0';
         }
-        else if (s[i] >= 'a' && s[i] <= 'f') {
+        else if (s[i] >= 'a' && s[i] <= 'f')
+        {
             hex |= s[i] - 'a' + 10;
         }
-        else if (s[i] >= 'A' && s[i] <= 'F') {
+        else if (s[i] >= 'A' && s[i] <= 'F')
+        {
             hex |= s[i] - 'A' + 10;
         }
-        else {
+        else
+        {
             throw std::runtime_error("Failed to parse hexadecimal " + s);
         }
     }

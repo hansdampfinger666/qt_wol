@@ -9,20 +9,15 @@
 
 int main(int argc, char *argv[])
 {
-
-    Pinger p;
-    std::thread pinger_thread(&Pinger::start_loop, p);
-    pinger_thread.join();
-
-
     Config m;
     QApplication a(argc, argv);
     MainWindow w (m.config);
     w.show();
+    Pinger p (w);
     Sender s (w);
     a.exec();
 
-
+    std::cout << "Main thread no " << std::this_thread::get_id() << " has stopped working" << std::endl;
 }
 
 

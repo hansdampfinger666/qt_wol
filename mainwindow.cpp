@@ -15,7 +15,6 @@ MainWindow::MainWindow(std::vector< std::vector<std::string>>& i_machines, QWidg
     QObject::connect(returnShortcut, &QShortcut::activated, this, &MainWindow::on_buttonBox_accepted);
     QShortcut *escShortcut = new QShortcut(QKeySequence("Escape"), ui->buttonBox);
     QObject::connect(escShortcut, &QShortcut::activated, this, &MainWindow::on_buttonBox_rejected);
-
 }
 
 
@@ -25,8 +24,8 @@ MainWindow::~MainWindow()
 }
 
 
-QList <QCheckBox *> MainWindow::get_cb(QWidget *obj){
-
+QList <QCheckBox *> MainWindow::get_cb(QWidget *obj)
+{
     cb_list = obj->findChildren <QCheckBox *>();
     return cb_list;
 }
@@ -34,15 +33,15 @@ QList <QCheckBox *> MainWindow::get_cb(QWidget *obj){
 
 void MainWindow::modify_cb(){
 
-    for (unsigned long i = 0; i < machines.size(); i++){
-
+    for (unsigned long i = 0; i < machines.size(); i++)
+    {
         cb_list[i]->setText(QString::fromStdString(machines[i][0]));
     }
 }
 
 
-void MainWindow::on_buttonBox_accepted(){
-
+void MainWindow::on_buttonBox_accepted()
+{
     unsigned int i = 0;
     bool mode;
 
@@ -68,14 +67,15 @@ void MainWindow::on_buttonBox_accepted(){
         }
         i++;
     }
-
+    emit emit_pinger_stop();
     emit emit_todo(machines, mode);
     qApp->exit();
 }
 
 
-void MainWindow::on_buttonBox_rejected(){
-
+void MainWindow::on_buttonBox_rejected()
+{
+    emit emit_pinger_stop();
     qApp->exit();
 }
 
@@ -86,13 +86,13 @@ void MainWindow::on_buttonBox_rejected(){
 
 
 
-template <typename T> void MainWindow::cout_vec (std::vector<std::vector<T>> &vec){
-
+template <typename T> void MainWindow::cout_vec (std::vector<std::vector<T>> &vec)
+{
 unsigned long rows = 1;
 rows = vec.size();
 
-    for (unsigned long r = 0; r < rows; r++){
-
+    for (unsigned long r = 0; r < rows; r++)
+    {
         for (std::string elem : vec[r] ){
             std::cout << elem << " ";
         }
@@ -100,8 +100,8 @@ rows = vec.size();
     }
 }
 
-template <typename T> void MainWindow::cout_vec (std::vector<T> &vec){
-
+template <typename T> void MainWindow::cout_vec (std::vector<T> &vec)
+{
         for (bool elem : vec ){
             std::cout << elem << " ";
         }
