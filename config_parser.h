@@ -27,6 +27,7 @@ public:
         std::vector<std::string> ips {};
         std::vector<std::string> ostype {};
         std::vector<std::string> ssh_pubkey_path {};
+        std::vector<std::string> ssh_user {};
         std::vector<bool> online {};
     };
     myty_config mys_config {};
@@ -37,10 +38,12 @@ public:
     const std::string myc_mac_tag = "mac = ";
     const std::string myc_ostype_tag = "ostype = ";
     const std::string myc_ssh_pubkey_tag = "ssh_pubkey_path = ";
+    const std::string myc_ssh_user_tag = "ssh_user = ";
     const long myc_machine_len = myc_machine_tag.length();
     const long myc_mac_len = myc_mac_tag.length();
     const long myc_ostype_len = myc_ostype_tag.length();
     const long myc_ssh_pubkey_len = myc_ssh_pubkey_tag.length();
+    const long myc_ssh_user_len = myc_ssh_user_tag.length();
 
 private:
 

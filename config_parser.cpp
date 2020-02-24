@@ -22,6 +22,7 @@ void Config::read_file()
             mys_config.ips.push_back("");
             mys_config.ostype.push_back("");
             mys_config.ssh_pubkey_path.push_back("");
+            mys_config.ssh_user.push_back("");
             mys_config.online.push_back(false);
         }
         else if(str.substr(0, myc_mac_len) == myc_mac_tag)
@@ -30,8 +31,9 @@ void Config::read_file()
             mys_config.ostype.at(my_no_machines - 1) = trim_r(str.substr(myc_ostype_len));
         else if(str.substr(0, myc_ssh_pubkey_len) == myc_ssh_pubkey_tag)
             mys_config.ssh_pubkey_path.at(my_no_machines - 1) = trim_r(str.substr(myc_ssh_pubkey_len));
+        else if(str.substr(0, myc_ssh_user_len) == myc_ssh_user_tag)
+            mys_config.ssh_user.at(my_no_machines - 1)  =  trim_r(str.substr(myc_ssh_user_len));
     }
-//    out();
 }
 
 
@@ -50,6 +52,7 @@ void Config::out()
                   << mys_config.ips.at(i) << "   "
                   << mys_config.ostype.at(i) << "   "
                   << mys_config.ssh_pubkey_path.at(i) << "   "
+                  << mys_config.ssh_user.at(i) << "   "
                   << mys_config.online.at(i) << "   "
                   << std::endl;
     }
@@ -64,6 +67,7 @@ void Config::out(int &i)
               << mys_config.ips.at(i) << "   "
               << mys_config.ostype.at(i) << "   "
               << mys_config.ssh_pubkey_path.at(i) << "   "
+              << mys_config.ssh_user.at(i) << "   "
               << mys_config.online.at(i) << "   "
               << std::endl;
 }

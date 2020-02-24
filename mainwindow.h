@@ -30,19 +30,22 @@ public:
     ~MainWindow();
     int my_no_machines;
 
-    //Events and handlers
+    //Events
     signals:
         void emit_todo(std::vector<unsigned long>&, bool&);
 
+    //Event handlers
     private slots:
         void on_buttonBox_accepted();
         void on_buttonBox_rejected();
+        void on_buttonBox_apply();
 
 private:
 
     //Methods
     void modify_cb();
     void update_led();
+    void send_todo();
 
     //Variables
     Config *myo_config;

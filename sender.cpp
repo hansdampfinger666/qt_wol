@@ -69,15 +69,7 @@ void Sender::send_shutdown(std::vector<unsigned long> &todo)
         std::string user = "root";
         std::string ssh_command = "poweroff";
 
-//        const char *ssh_app_c = ssh_app.c_str();
-//        const char *ssh_c = ssh.c_str();
-
-//        const char *ssh_total_c = (ssh_opt_id_file + " " +
-//                                   myo_config->mys_config.ssh_pubkey_path.at(todo.at(i)) + " " +
-//                                   user + "@" + myo_config->mys_config.ips.at(todo.at(i)) + " " +
-//                                   ssh_command).c_str();
-
-        ssh_file = ssh_opt_id_file + " " + myo_config->mys_config.ssh_pubkey_path.at(todo.at(i));
+        ssh_file = ssh_opt_id_file + myo_config->mys_config.ssh_pubkey_path.at(todo.at(i));
         ssh_server = user + "@" + myo_config->mys_config.ips.at(todo.at(i));
 
         std::cout << ssh_app << std::endl;
@@ -94,10 +86,6 @@ void Sender::send_shutdown(std::vector<unsigned long> &todo)
             std::cout << " sending " << std::endl;
 
             dup2(pipe_arr[1], STDOUT_FILENO);
-
-//            execl("/sbin/ssh", "ssh", "-i /home/al/.ssh/amd_freenas", "root@192.168.178.48", "poweroff", (char*)NULL);
-
-            //"-i /home/al/.ssh/amd_freenas",
 
             execl(ssh_app.c_str(), ssh.c_str(), ssh_file.c_str(),
                   ssh_server.c_str(), ssh_command.c_str(), (char*)NULL);

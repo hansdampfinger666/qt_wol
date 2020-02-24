@@ -16,13 +16,16 @@ MainWindow::MainWindow(Config *io_config, QWidget *parent) :
     mys_leds = this->findChildren <KLed *>();
     update_led();
 
-    //Set events
+    //Set shortcut events
     QShortcut *returnShortcut = new QShortcut(QKeySequence("Return"), ui->buttonBox);
     QShortcut *escShortcut = new QShortcut(QKeySequence("Escape"), ui->buttonBox);
 
-    //Set event handlers
+    //Set shortcut event handlers
     QObject::connect(escShortcut, &QShortcut::activated, this, &MainWindow::on_buttonBox_rejected);
     QObject::connect(returnShortcut, &QShortcut::activated, this, &MainWindow::on_buttonBox_accepted);
+
+//    QList <QObject*> children ;
+//    children = this->findChildren <QObject*>();
 }
 
 
@@ -35,9 +38,7 @@ MainWindow::~MainWindow()
 void MainWindow::modify_cb()
 {
     for (int i = 0; i < mys_checkboxes.count(); i++)
-    {
         mys_checkboxes[i]->setText(QString::fromStdString(myo_config->mys_config.names[i]));
-    }
 }
 
 
@@ -57,6 +58,20 @@ void MainWindow::update_led()
 
 void MainWindow::on_buttonBox_accepted()
 {
+    send_todo();
+    qApp->exit();
+}
+
+
+void MainWindow::on_buttonBox_apply()
+{
+    std::cout << " apply was clicked " << std::endl;
+//    send_todo();
+}
+
+
+void MainWindow::send_todo()
+{
     unsigned long index = 0;
     bool mode;
     std::vector<unsigned long> todo;
@@ -75,7 +90,6 @@ void MainWindow::on_buttonBox_accepted()
         index++;
     }
     emit emit_todo(todo, mode);
-    qApp->exit();
 }
 
 

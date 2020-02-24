@@ -21,7 +21,8 @@ public:
     //Methods
     void static discover_network(Config *);
     void static parse_arp_response(std::string, Config *);
-    void static send_ping(std::string *ip);
+
+//    void static send_ping(std::string *ip);
 };
 
 #endif // PINGER_H
