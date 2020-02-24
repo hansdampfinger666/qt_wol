@@ -1,90 +1,71 @@
 #include "pinger.h"
 
-
-Pinger::Pinger(MainWindow &w)
+void Pinger::discover_network(Config *config)
 {
-    QObject::connect(&w, &MainWindow::emit_pinger_stop, this, &Pinger::receive_stop);
-    start_loop();
-}
+    int pipe_arr[2];
+    char buf[BUFLEN];
 
-
-bool Pinger::send_ping()
-{
     //Create pipe - pipe_arr[0] is "reading end", pipe_arr[1] is "writing end"
     pipe(pipe_arr);
 
     if(fork() == 0) //child
     {
         dup2(pipe_arr[1], STDOUT_FILENO);
-        execl("/sbin/ping", "ping", "-c 1", "192.168.178.21", static_cast<char*>(nullptr));  //linux specific
+        execl("/sbin/arp", "arp", "-a", (char*)NULL);
     }
     else //parent
     {
-        wait(nullptr);
-        read(pipe_arr[0], buf, buflen);
-        std::cout << buf;
-        std::cout << "Pinger function thread id: " << std::this_thread::get_id() << std::endl;
+        wait(NULL);
+        read(pipe_arr[0], buf, BUFLEN);
+        printf("%s\n", buf);
     }
 
     close(pipe_arr[0]);
     close(pipe_arr[1]);
 
-    std::string buf_str = static_cast<std::string>(buf);
-    int received_pos = buf_str.find("% packet loss");
-    int last_comma_pos = buf_str.substr(0, received_pos).find_last_of(",")+1;
-    int percent_packetloss = stoi(buf_str.substr(last_comma_pos, received_pos-last_comma_pos));
+    std::ostringstream buf_str;
+    buf_str << buf;
 
-    std::cout << "% of packets lost: " << percent_packetloss << std::endl;
-
-    switch(percent_packetloss)
-    {
-    case 100:
-        return false;
-    case 0:
-        return true;
-    default:
-        return false;
-    }
-
+    parse_arp_response(buf_str.str(), config);
 }
 
 
-void Pinger::start_loop()
+void Pinger::parse_arp_response(std::string buf, Config *config)
 {
-    receive_stop();
-
+    for (unsigned long i = 0; i < config->mys_config.macs.size(); i++)
     {
-    auto locked = std::unique_lock<std::mutex>(mutex);
-    application_closing = false;
-    }
+        unsigned long found_mac_at = buf.find(config->mys_config.macs.at(i), 0);
 
-    pinger_thread = std::thread([=]()
-    {
-        auto locked = std::unique_lock<std::mutex>(mutex);
-
-        while(!application_closing)
+        if (found_mac_at != std::string::npos)
         {
-            std::cout << "Pinger loop thread number " << std::this_thread::get_id() << " working!" << std::endl;
-            terminate.wait_for(locked, std::chrono::seconds(3));
-            send_ping();
+            config->mys_config.online.at(i) = true;
+            config->mys_config.ips.at(i) = buf.substr(buf.substr(0, found_mac_at).find_last_of("(") + 1,
+                                           buf.substr(0, found_mac_at).find_last_of(")") -
+                                           buf.substr(0, found_mac_at).find_last_of("(") - 1);
         }
-    });
+    }
 }
 
 
-void Pinger::receive_stop()
+void Pinger::send_ping(std::string *ip)
 {
-    {
-        // Set the predicate
-        auto locked = std::unique_lock<std::mutex>(mutex);
-        application_closing = true;
-    }
+    int pipe_arr[2];
+    char buf[BUFLEN];
 
-    // Tell the thread the predicate has changed
-    terminate.notify_one();
+    //Create pipe - pipe_arr[0] is "reading end", pipe_arr[1] is "writing end"
+    pipe(pipe_arr);
 
-    if(pinger_thread.joinable())
+    if(fork() == 0) //child
     {
-        pinger_thread.join();
+        dup2(pipe_arr[1], STDOUT_FILENO);
+        execl("/sbin/ping", "ping", "-c 1", &ip, (char*)NULL);
     }
+    else //parent
+    {
+        wait(NULL);
+        read(pipe_arr[0], buf, BUFLEN);
+        printf("%s\n", buf);
+    }
+    close(pipe_arr[0]);
+    close(pipe_arr[1]);
 }

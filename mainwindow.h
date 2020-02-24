@@ -9,7 +9,10 @@
 #include <QShortcut>
 #include <iostream>
 #include <vector>
-#include <thread>
+#include <config_parser.h>
+#include <kled.h>
+#include <pinger.h>
+#include <QColor>
 
 
 namespace Ui {
@@ -21,31 +24,43 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow (std::vector<std::vector<std::string>>&, QWidget* parent = nullptr);
+
+    //Methods
+    MainWindow (Config *io_config = nullptr, QWidget *parent = nullptr);
     ~MainWindow();
-    std::vector <std::vector<std::string>> machines;
-    int no_machines;
+    int my_no_machines;
 
-    template <typename T> void cout_vec (std::vector<std::vector<T>>&);
-    template <typename T> void cout_vec (std::vector<T>&);
+    //Events and handlers
+    signals:
+        void emit_todo(std::vector<unsigned long>&, bool&);
 
-signals:
-    void emit_todo(std::vector <std::vector<std::string>>&, bool&);
-    void emit_pinger_stop();
-
-private slots:
-    void on_buttonBox_accepted();
-    void on_buttonBox_rejected();
+    private slots:
+        void on_buttonBox_accepted();
+        void on_buttonBox_rejected();
 
 private:
-    void wake_up_pinger();
 
-    Ui::MainWindow *ui;
-    QList <QCheckBox *> cb_list;
-    QList <QCheckBox *> get_cb (QWidget *);
+    //Methods
     void modify_cb();
+    void update_led();
+
+    //Variables
+    Config *myo_config;
+    Pinger *myo_pinger;
+    Ui::MainWindow *ui;
+    QList <QCheckBox *> mys_checkboxes;
+    QList <KLed *> mys_leds;
+
+    //Constants
     const std::string id_cb = "checkBox_";
     const long id_cb_len = id_cb.length();
+
+protected:
+
+//#ifndef QT_NO_CONTEXTMENU
+//    void contextMenuEvent(QContextMenuEvent *event) override;
+//#endif // QT_NO_CONTEXTMENU
+
 };
 
 #endif // MAINWINDOW_H

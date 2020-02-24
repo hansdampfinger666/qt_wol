@@ -123,6 +123,36 @@
      <string>Shut down</string>
     </property>
    </widget>
+   <widget class="KLed" name="kled_0">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>15</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="KLed" name="kled_1">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>55</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="KLed" name="kled_2">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>95</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -130,7 +160,7 @@
      <x>0</x>
      <y>0</y>
      <width>334</width>
-     <height>28</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuChose_machines_wo_wake_up">
@@ -151,6 +181,13 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KLed</class>
+   <extends>QWidget</extends>
+   <header>kled.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
